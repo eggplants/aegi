@@ -3,19 +3,31 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-p {
-  font-size: 10px;
+textarea {
+  width: 100%;
+  min-height: 300px;
+  resize: vertical;
 }
-div {
-  display: inline-block;
+button {
+  padding: 15px 32px;
 }
 ul {
   list-style: none;
-  padding-left: 0;
+  padding-left: 20%;
   text-align: left;
+  align-items: center;
+  flex-direction: column;
 }
-textarea {
-  width: 100%;
-  min-height: 256px;
-  resize: vertical;
+p.note {
+  font-size: 10px;
+}
+@media screen and (min-width: 1000px) {
+  div.input-text,
+  div.output-text {
+    display: inline-block;
+  }
+  textarea {
+    width: 450px;
+    min-height: 300px;
+  }
 }

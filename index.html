@@ -3,6 +3,10 @@
   <head>
     <title>喋らせている最中に任意のタイミングでちょっかい出すやつ</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    />
     <script src="aegi.js" defer></script>
     <link rel="stylesheet" href="aegi.css" />
     <link
@@ -12,50 +16,56 @@
   </head>
   <body>
     <h1>喋らせている最中に任意のタイミングでちょっかい出すやつ</h1>
-    <p>※喘ぎ変換ツールではないので、何もしなければ文面は変化しません。</p>
-    <p>
+    <p class="note">
+      ※喘ぎ変換ツールではないので、何もしなければ文面は変化しません。
+    </p>
+    <p class="note">
       ※文字を送っている最中にちょっかいボタンを押すことでセリフを変化させるものです。
     </p>
-    <div class="input-text">
-      <textarea
-        id="Input"
-        placeholder="ここに喋らせたいものをいれる"
-      ></textarea>
-      <br />
-      <button onclick="start();">喋らせる</button>
-      <button onclick="gTrickReserve = true;">ちょっかい</button>
-      <br />
-      <ul>
-        <li>
-          <input type="checkbox" id="Heart" checked />
-          <label for="Heart"> ハートマーク入れる </label>
-        </li>
-        <li>
-          <input type="checkbox" id="Declare" />
-          <label for="Declare"> 何かに到達したら強制的に申告させる </label>
-        </li>
-        <li>
-          <input type="checkbox" id="OhMode" />
-          <label for="OhMode"> お"モード </label>
-        </li>
-        <li>
-          <input type="checkbox" id="SuperTrick" />
-          <label for="SuperTrick">ちょっかいパワーMAX</label>
-        </li>
-      </ul>
+    <div class="text">
+      <div class="input-text">
+        <textarea
+          id="Input"
+          placeholder="ここに喋らせたいものをいれる"
+        ></textarea>
+        <br />
+        <button onclick="start();">喋らせる</button>
+        <button onclick="gTrickReserve = true;">ちょっかい</button>
+        <br />
+        <ul>
+          <li>
+            <input type="checkbox" id="Heart" checked />
+            <label for="Heart">「♥」を入れる</label>
+          </li>
+          <li>
+            <input type="checkbox" id="Declare" />
+            <label for="Declare">何かに到達したら申告を強制させる</label>
+          </li>
+          <li>
+            <input type="checkbox" id="OhMode" />
+            <label for="OhMode">お゛モード</label>
+          </li>
+          <li>
+            <input type="checkbox" id="SuperTrick" />
+            <label for="SuperTrick">ちょっかいパワーMAX</label>
+          </li>
+        </ul>
+      </div>
+      <div class="output-text">
+        <button onclick="gRequestReset = true;">状態リセット</button>
+        <p class="note">
+          　※ちょっかいへの反応度合いと息切れ状態をリセットします。
+        </p>
+        <textarea id="Output" disabled></textarea>
+      </div>
     </div>
-    <div class="output-text">
-      <button onclick="gRequestReset = true;">状態リセット</button>
-      <p>　※ちょっかいへの反応度合いと息切れ状態をリセットします。</p>
-      <textarea id="Output" disabled></textarea>
-    </div>
-    <p>
+    <footer>
       ※元:
       <a href="https://hungry-foxtail.sakura.ne.jp/game/Talk/Talk.html"
         >Foxtail様</a
       >
       , 改変したソース:
       <a href="https://github.com/eggplants/aegi">eggplants/aegi</a>
-    </p>
+    </footer>
   </body>
 </html>
