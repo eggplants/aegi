@@ -11,11 +11,6 @@ var gAlreadyTrick = false;
 var gFinish = false;
 var gRequestReset = false;
 
-var checked_heart = document.getElementById("Heart").checked;
-var checked_declare = document.getElementById("Declare").checked;
-var checked_oh = document.getElementById("OhMode").checked;
-var checked_supertrick = document.getElementById("SuperTrick").checked;
-
 var gReactionTable = {
   あ: [
     "っ",
@@ -69,6 +64,25 @@ var gReactionTable = {
   ん: ["んっ", "お゛っ", "ぅ゛っ", "うっ"],
 };
 
+var checked_heart = () => {
+  return document.getElementById("Heart").checked;
+};
+var checked_declare = () => {
+  return document.getElementById("Declare").checked;
+};
+var checked_oh = () => {
+  return document.getElementById("OhMode").checked;
+};
+var checked_supertrick = () => {
+  return document.getElementById("SuperTrick").checked;
+};
+
+function sampleString(arr, threshold) {
+  return arr.filter((c) => {
+    if (Math.random() < threshold) return c;
+  });
+}
+
 function insertString(pos, str) {
   if (str == "" || str == undefined || str.includes("undefined")) return;
   var message = gMessage.substring(0, pos);
@@ -79,7 +93,7 @@ function insertExclamation(str) {
   if (100 >= gTension && gTension > 50) {
     str += "！";
   } else if (100 < gTension) {
-    if (!checked_heart) {
+    if (!checked_heart()) {
       str += "！";
     } else if (Math.random() < 0.75) {
       str += "♥";
@@ -131,32 +145,25 @@ function update() {
     interval += 100;
   }
 
-  // なにかするまでは息継ぎ判定も含めなにもしない
   if (gAlreadyTrick) {
     var last_char = gMessage[gTextCursor];
-    switch (last_char) {
-      case "\n":
-        break;
-      case "、":
-        gBreath += 15;
-        interval += 100;
-        break;
-      case "。":
-        gBreath += 35;
-        interval += 200;
-        break;
-      case "？":
-        gBreath += 35;
-        interval += 200;
-        break;
-      case "…":
-        gBreath += 50;
-        interval += 300;
-        break;
-      default:
-        gBreath -= 1;
-        gTension -= 0.5;
-        break;
+    if (last_char === "\n") {
+      // nothing
+    } else if (last_char === "、") {
+      gBreath += 15;
+      interval += 100;
+    } else if (last_char === "。") {
+      gBreath += 35;
+      interval += 200;
+    } else if (last_char === "？") {
+      gBreath += 35;
+      interval += 200;
+    } else if (last_char === "…") {
+      gBreath += 50;
+      interval += 300;
+    } else {
+      gBreath -= 1;
+      gTension -= 0.5;
     }
 
     if (1000 < gTension) gTension = 1000;
@@ -165,72 +172,58 @@ function update() {
     if (gBreath < -100) gBreath = -100;
 
     if (0 < gTension) {
+      var str = "";
       if (gBreath < 0) {
         gBreath += 1;
-        if (checked_oh) {
-          if (Math.random() < 0.1)
-            insertString(gTextCursor, "…お…"), (interval += 50);
-
-          if (Math.random() < 0.1)
-            insertString(gTextCursor, "…っんぉッ"), (interval += 50);
-        } else {
-          if (Math.random() < 0.1)
-            insertString(gTextCursor, "…う…"), (interval += 50);
-          if (Math.random() < 0.1)
-            insertString(gTextCursor, "…はひ…"), (interval += 50);
-        }
-        if (Math.random() < 0.1)
-          insertString(gTextCursor, "…っはぁッ"), (interval += 50);
-        if (Math.random() < 0.05)
-          insertString(gTextCursor, "…はーっ…"), (interval += 50);
-        if (Math.random() < 0.01)
-          insertString(gTextCursor, "…はっ…"), (interval += 50);
+        sampleString(
+          checked_oh() ? ["…お…", "…っんぉッ"] : ["…う…", "…はひ…"],
+          0.1
+        ).forEach((c) => {
+          str += c;
+          interval += 50;
+        });
+        if (Math.random() < 0.1) (str += "…っはぁッ"), (interval += 50);
+        if (Math.random() < 0.05) (str += "…はーっ…"), (interval += 50);
+        if (Math.random() < 0.01) (str += "…はっ…"), (interval += 50);
         gBreath += 2.5;
       } else if (gBreath < 20) {
         gBreath += 2;
-        if (Math.random() < 0.05)
-          insertString(gTextCursor, "…っ"), (interval += 50);
+        if (Math.random() < 0.05) (str += "…っ"), (interval += 50);
       } else if (gBreath < 50) {
         gBreath += 1.5;
-        if (Math.random() < 0.2)
-          insertString(gTextCursor, "…"), (interval += 50);
+        if (Math.random() < 0.2) (str += "…"), (interval += 50);
       }
+      if (str === "") insertString(gTextCursor, str);
     }
 
-    if (checked_declare && Math.random() < 0.01 && 250 < gTension) {
+    if (checked_declare() && Math.random() < 0.01 && 250 < gTension) {
       var str = "";
-      if (Math.random() < 0.25) (str += "っ"), (interval += 100);
-      if (Math.random() < 0.25) (str += "ッ"), (interval += 100);
-      if (Math.random() < 0.25) (str += "…"), (interval += 50);
+      sampleString(["っ", "…", "ッ"], 0.25).forEach((c) => {
+        str += c;
+        interval += c === "…" ? 100 : 50;
+      });
       str += "イきました";
-      if (document.getElementById("OhMode").checked) {
-        if (Math.random() < 0.25) (str += "お"), (interval += 50);
-        if (Math.random() < 0.25) (str += "お゛"), (interval += 50);
-        if (Math.random() < 0.25) (str += "ん"), (interval += 50);
-        if (Math.random() < 0.25) (str += "ん゛"), (interval += 50);
-      } else {
-        if (Math.random() < 0.25) (str += "あ"), (interval += 50);
-        if (Math.random() < 0.25) (str += "あ゛"), (interval += 50);
-      }
-      if (Math.random() < 0.25) (str += "っ"), (interval += 100);
-      if (Math.random() < 0.25) (str += "ッ"), (interval += 100);
-      if (Math.random() < 0.25) (str += "…"), (interval += 50);
+      sampleString(
+        checked_oh()
+          ? ["お", "お゛", "ん", "ん゛", "っ", "…", "ッ"]
+          : ["あ", "あ゛", "っ", "…", "ッ"],
+        0.25
+      ).forEach((c) => {
+        str += c;
+        interval += c === "…" ? 100 : 50;
+      });
 
       insertString(gTextCursor, insertExclamation(str));
+
       if (Math.random() < 0.01) trick();
       if (Math.random() < 0.25) {
         var top = gTextCursor - Math.floor(Math.random() * 10);
-        if (top < 0) top = 0;
-        var end = gTextCursor;
-        var str = gMessage.substring(top, end);
+        var str = gMessage.substring(top < 0 ? 0 : top, gTextCursor);
 
         var proceed = 0;
-        if (Math.random() < 0.25)
-          (str += "…ッ"), (interval += 100), (proceed += 1);
-        if (Math.random() < 0.5)
-          (str += "……"), (interval += 100), (proceed += 1);
-        if (Math.random() < 0.5)
-          (str += "…っ"), (interval += 100), (proceed += 1);
+        sampleString(["…っ", "……", "…ッ"], 0.25).forEach((c) => {
+          (str += c), (interval += 100), (proceed += 1);
+        });
 
         insertString((gTextCursor += proceed), str);
       }
@@ -240,9 +233,9 @@ function update() {
   if (gMessage.length <= gTextCursor) {
     if (gAlreadyTrick) {
       var str = "";
-      if (Math.random() < 0.25) (str += "ッ"), (interval += 100);
-      if (Math.random() < 0.5) (str += "…"), (interval += 100);
-      if (Math.random() < 0.5) (str += "っ"), (interval += 100);
+      sampleString(["っ", "…", "ッ"], 0.5).forEach((c) => {
+        (str += c), (interval += 100), (proceed += 1);
+      });
       insertString(gTextCursor, insertExclamation(str));
     }
 
@@ -296,27 +289,20 @@ function trick() {
     var str = reaction[idx];
     if (gBreath < 5) str += "…";
     if (Math.random() < 0.2) str += last_char;
-    str = insertExclamation(str);
-    insertString(gTextCursor, str);
+    insertString(gTextCursor, insertExclamation(str));
   } else if (!"、。？！・".includes(last_char)) {
     is_hit = true;
     if (Math.random() < 0.15) {
       var str = "っ";
       if (Math.random() < 0.2) str += "…";
-
-      if (document.getElementById("OhMode").checked) {
-        if (Math.random() < 0.1) str += "おっ";
-        if (Math.random() < 0.1) str += "んっ";
-        if (Math.random() < 0.1) str += "うっ";
-        if (Math.random() < 0.1) str += "ほっ";
-        if (Math.random() < 0.1) str += "おっ";
-      } else {
-        if (Math.random() < 0.1) str += "やっ";
-        if (Math.random() < 0.1) str += "あっ";
-        if (Math.random() < 0.1) str += "めっ";
-        if (Math.random() < 0.1) str += "くっ";
-        if (Math.random() < 0.1) str += "はっ";
-      }
+      sampleString(
+        checked_oh()
+          ? ["おっ", "んっ", "うっ", "ほっ", "おっ"]
+          : [("やっ", "あっ", "めっ", "くっ", "はっ")],
+        0.1
+      ).forEach((c) => {
+        str += c;
+      });
 
       if (gBreath < 5) str += "…";
       if (Math.random() < 0.2) str += last_char;
@@ -325,17 +311,15 @@ function trick() {
     }
   }
 
-  if (checked_declare && gTension > 250 && Math.random() < 0.25) {
+  if (checked_declare() && gTension > 250 && Math.random() < 0.25) {
     var str = "";
-    if (Math.random() < 0.25) str += "…";
-    if (Math.random() < 0.25) str += "っ";
-    if (Math.random() < 0.25) str += "ッ";
+    sampleString(["っ", "…", "ッ"], 0.25).forEach((c) => {
+      str += c;
+    });
     str += "イきました";
-    if (Math.random() < 0.25) str += "あ";
-    if (Math.random() < 0.25) str += "あ゛";
-    if (Math.random() < 0.25) str += "っ";
-    if (Math.random() < 0.25) str += "ッ";
-    if (Math.random() < 0.25) str += "…";
+    sampleString(["あ", "あ゛", "っ", "ッ", "…"], 0.25).forEach((c) => {
+      str += c;
+    });
     insertString(gTextCursor, insertExclamation(str));
   }
 
@@ -353,7 +337,7 @@ function trick() {
 
   gPrevTension = gTension;
   if (is_hit) {
-    gTension += checked_supertrick ? 500 : 50;
+    gTension += checked_supertrick() ? 500 : 50;
     gBreath -= 30;
     gTrickReserve = false;
   }
