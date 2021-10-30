@@ -12,3 +12,10 @@
 - スマホ対応
 - レスポンシブ
 - コードリファクタリング
+
+## Icon
+
+- icon.png: <https://erostock.net/sozai/mosaic01>
+- icon.ico: <https://erostock.net/sozai/mosaic03>
+
+©エロストック
