@@ -99,16 +99,14 @@ function insertExclamation(str) {
       str += "♥";
       if (200 < gTension) {
         var num = (gTension - 200) / 500;
-        var heart_idx = 0;
-        for (; heart_idx < num; heart_idx++)
+        for (var heart_idx = 0; heart_idx < num; heart_idx++)
           if (Math.random() < 0.5) str += "♥";
       }
     } else {
       str += "！";
       if (200 < gTension) {
         var num = (gTension - 200) / 500;
-        var heart_idx = 0;
-        for (; heart_idx < num; heart_idx++)
+        for (var heart_idx = 0; heart_idx < num; heart_idx++)
           if (Math.random() < 0.5) str += "！";
       }
     }
