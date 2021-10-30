@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+    <title>喋らせている最中に任意のタイミングでちょっかい出すやつ</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="aegi.js" defer></script>
+    <link rel="stylesheet" href="aegi.css" />
+  </head>
+  <body>
+    <h1>喋らせている最中に任意のタイミングでちょっかい出すやつ</h1>
+    <p>
+      ※
+      <a href="https://hungry-foxtail.sakura.ne.jp/game/Talk/Talk.html"
+        >Foxtail様</a
+      >
+      の改変版
+    </p>
+    <p>
+      ※文字を送っている最中にちょっかいボタンを押すことでセリフを変化させるものです。<br />
+      　喘ぎ変換ツールではないので、何もしなければ文面は変化しません。
+    </p>
+    <div>
+      <textarea
+        id="Input"
+        placeholder="ここに喋らせたいものをいれる"
+      ></textarea>
+      <br />
+      <button onclick="start();">喋らせる</button>
+      <button onclick="gTrickReserve = true;">ちょっかい</button>
+      <br />
+      <ul>
+        <li>
+          <input type="checkbox" id="Heart" checked />
+          <label for="Heart"> ハートマーク入れる </label>
+        </li>
+        <li>
+          <input type="checkbox" id="Declare" />
+          <label for="Declare"> 何かに到達したら強制的に申告させる </label>
+        </li>
+        <li>
+          <input type="checkbox" id="OhMode" />
+          <label for="OhMode"> お"モード </label>
+        </li>
+        <li>
+          <input type="checkbox" id="SuperTrick" />
+          <label for="SuperTrick">ちょっかいパワーMAX</label>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <button onclick="gRequestReset = true;">状態リセット</button>
+      <p>※ちょっかいへの反応度合いと息切れ状態をリセットします。</p>
+      <textarea id="Output" disabled></textarea>
+    </div>
+  </body>
+</html>
