@@ -4,7 +4,7 @@ body {
   margin-right: auto;
 }
 textarea {
-  width: 100%;
+  width: 80%;
   min-height: 300px;
   resize: vertical;
 }
@@ -27,6 +27,7 @@ p.note {
     display: inline-block;
   }
   textarea {
+    width: 100%;
     width: 450px;
     min-height: 300px;
   }
