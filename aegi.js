@@ -90,26 +90,20 @@ function insertString(pos, str) {
 }
 
 function insertExclamation(str) {
-  if (100 >= gTension && gTension > 50) {
-    str += "！";
-  } else if (100 < gTension) {
-    if (!checked_heart()) {
-      str += "！";
-    } else if (Math.random() < 0.75) {
-      str += "♥";
-      if (200 < gTension) {
-        var num = (gTension - 200) / 500;
-        for (var heart_idx = 0; heart_idx < num; heart_idx++)
-          if (Math.random() < 0.5) str += "♥";
-      }
-    } else {
-      str += "！";
-      if (200 < gTension) {
-        var num = (gTension - 200) / 500;
-        for (var heart_idx = 0; heart_idx < num; heart_idx++)
-          if (Math.random() < 0.5) str += "！";
-      }
+  const addEmotional = (c) => {
+    str += c;
+    if (200 < gTension) {
+      var num = (gTension - 200) / 500;
+      for (var heart_idx = 0; heart_idx < num; heart_idx++)
+        if (Math.random() < 0.5) str += c;
     }
+  };
+  if (50 > gTension) {
+    // nothing
+  } else if (100 >= gTension || !checked_heart()) {
+    str += "！";
+  } else {
+    addEmotional(Math.random() < 0.75 ? "♥" : "！");
   }
   return str;
 }
@@ -276,9 +270,7 @@ function trick() {
   } else if ("んン".includes(last_char)) {
     last_char_kind = "ん";
   }
-  if (document.getElementById("OhMode").checked) {
-    last_char_kind = "お";
-  }
+  if (checked_oh()) last_char_kind = "お";
 
   var reaction = gReactionTable[last_char_kind];
   if (reaction && reaction.length > 0) {
