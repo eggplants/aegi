@@ -13,55 +13,55 @@ var gRequestReset = false;
 
 var gReactionTable = {
   あ: [
+    "ぁぁ゛っ",
+    "ぁっ",
+    "あぁっ",
+    "あっ",
+    "あ゛っ",
     "っ",
+    "っぁ",
+    "っぁ゛",
+    "っぁ゛",
     "っく",
     "っん",
-    "ん゛っ",
-    "ひっ",
     "はっ",
-    "っぁ゛",
-    "あっ",
-    "あぁっ",
-    "っぁ",
-    "ぁっ",
     "ひぃっ",
     "ひっ",
-    "っぁ゛",
+    "ひっ",
     "ん゛っ",
-    "ぁぁ゛っ",
-    "あ゛っ",
+    "ん゛っ",
   ],
   い: [
-    "ん゛っ",
-    "んっ",
+    "ぁッ",
+    "ぎぃッ",
+    "ぎっ",
     "ぎっ",
     "っ",
-    "ひぃっ",
-    "ぎっ",
-    "ぎぃッ",
-    "んっ",
-    "ぁッ",
-    "ィっ",
     "っぃん",
-  ],
-  う: ["ぐっ", "ふっ", "ん゛っ", "ぅっ", "っぐ", "っん"],
-  え: ["ん゛っ", "っ", "ぁッ", "っ…ぇ", "ひっ", "ぇっん゛"],
-  お: [
+    "ひぃっ",
+    "んっ",
+    "んっ",
     "ん゛っ",
-    "お゛っ",
+    "ィっ",
+  ],
+  う: ["ぅっ", "ぐっ", "っぐ", "っん", "ふっ", "ん゛っ"],
+  え: ["ぁッ", "ぇっん゛", "っ", "っ…ぇ", "ひっ", "ん゛っ"],
+  お: [
+    "ぅ゛っ",
+    "ぉっ",
     "ぉ゛ッ",
     "ぉ゛ッひ",
-    "っぉ",
-    "お゛っ",
-    "っぉ゛",
+    "おぅ゛っ",
     "おっ",
     "お゛っ",
-    "おぅ゛っ",
-    "ぉっ",
-    "ぅ゛っ",
+    "お゛っ",
+    "お゛っ",
+    "っぉ",
+    "っぉ゛",
+    "ん゛っ",
     "ォっ",
   ],
-  ん: ["んっ", "お゛っ", "ぅ゛っ", "うっ"],
+  ん: ["ぅ゛っ", "うっ", "お゛っ", "んっ"],
 };
 
 var checked_heart = () => {
@@ -84,26 +84,26 @@ function sampleString(arr, threshold) {
 }
 
 function insertString(pos, str) {
-  if (str == "" || str == undefined || str.includes("undefined")) return;
-  var message = gMessage.substring(0, pos);
-  gMessage = message + str + gMessage.substring(pos);
+  if (str == "" || str == undefined || str.includes("undefined")) {
+    // nothing
+  } else {
+    gMessage = gMessage.substring(0, pos) + str + gMessage.substring(pos);
+  }
 }
 
 function insertExclamation(str) {
-  const addEmotional = (c) => {
+  if (50 > gTension) {
+    // nothing
+  } else if (100 >= gTension || !checked_heart()) {
+    str += "！";
+  } else {
+    var c = Math.random() < 0.75 ? "♥" : "！";
     str += c;
     if (200 < gTension) {
       var num = (gTension - 200) / 500;
       for (var heart_idx = 0; heart_idx < num; heart_idx++)
         if (Math.random() < 0.5) str += c;
     }
-  };
-  if (50 > gTension) {
-    // nothing
-  } else if (100 >= gTension || !checked_heart()) {
-    str += "！";
-  } else {
-    addEmotional(Math.random() < 0.75 ? "♥" : "！");
   }
   return str;
 }
@@ -144,10 +144,7 @@ function update() {
     } else if (last_char === "、") {
       gBreath += 15;
       interval += 100;
-    } else if (last_char === "。") {
-      gBreath += 35;
-      interval += 200;
-    } else if (last_char === "？") {
+    } else if ("。？".includes(last_char)) {
       gBreath += 35;
       interval += 200;
     } else if (last_char === "…") {
@@ -158,10 +155,10 @@ function update() {
       gTension -= 0.5;
     }
 
-    if (1000 < gTension) gTension = 1000;
     if (gTension < 0) gTension = 0;
-    if (200 < gBreath) gBreath = 200;
+    if (1000 < gTension) gTension = 1000;
     if (gBreath < -100) gBreath = -100;
+    if (200 < gBreath) gBreath = 200;
 
     if (0 < gTension) {
       var str = "";
@@ -216,8 +213,8 @@ function update() {
         sampleString(["…っ", "……", "…ッ"], 0.25).forEach((c) => {
           (str += c), (interval += 100), (proceed += 1);
         });
-
-        insertString((gTextCursor += proceed), str);
+        insertString(gTextCursor, str);
+        gTextCursor += proceed;
       }
     }
   }
