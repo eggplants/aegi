@@ -182,7 +182,7 @@ function update() {
         gBreath += 1.5;
         if (Math.random() < 0.2) (str += "…"), (interval += 50);
       }
-      if (str === "") insertString(gTextCursor, str);
+      if (str !== "") insertString(gTextCursor, str);
     }
 
     if (checked_declare() && Math.random() < 0.01 && 250 < gTension) {
